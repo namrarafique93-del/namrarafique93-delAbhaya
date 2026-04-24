@@ -16,7 +16,7 @@ import { CameraView, useCameraPermissions, useMicrophonePermissions } from 'expo
 import * as Location from 'expo-location';
 import { useAuth } from '../context/AuthContext';
 import { useReport } from '../context/ReportContext';
-import { incidentAPI } from '../services/api';
+import { incidentAPI, videoAPI } from '../services/api';
 import { saveIncidentReport } from '../services/reportStorage';
 
 const RECORD_SECONDS = 10;
@@ -210,6 +210,16 @@ export default function IncidentReportScreen({ navigation, route }) {
         const upload = await incidentAPI.uploadVideoToCloudinary(uri);
         if (!upload?.success || !upload?.data?.url) {
           throw new Error(upload?.error || 'Failed to upload video.');
+        }
+
+        // Persist the uploaded Cloudinary video against the logged-in user.
+        try {
+          await videoAPI.saveVideo({
+            videoUrl: upload.data.url,
+            incidentId: reportRef.current?.incidentId,
+          });
+        } catch {
+          // Do not block the SOS/report flow if metadata persistence fails.
         }
 
         const evidenceTimestamp = new Date().toISOString();

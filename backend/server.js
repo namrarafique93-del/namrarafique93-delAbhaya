@@ -40,12 +40,15 @@ const historyRoutes = require('./routes/history');
 const vehicleObservationRoutes = require('./routes/vehicleObservations');
 const incidentRoutes = require('./routes/incidents');
 const emailRoutes = require('./routes/email');
+const userVideoRoutes = require('./routes/userVideos');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/journey', journeyRoutes);
 app.use('/api/history', historyRoutes);
 app.use('/api/vehicle-observations', vehicleObservationRoutes);
 app.use('/api/incidents', incidentRoutes);
+app.use(userVideoRoutes);
+app.use('/api', userVideoRoutes);
 
 // Supports both:
 // - POST /send-email
@@ -106,6 +109,9 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log('PATCH  /api/history/:historyId');
   console.log('GET    /api/vehicle-observations');
   console.log('POST   /api/vehicle-observations');
+  console.log('POST   /api/save-video');
+  console.log('GET    /api/user-videos/:userId');
+  console.log('DELETE /api/video/:id');
   console.log('POST   /send-email');
   console.log('POST   /api/send-email');
   console.log('GET    /api/health');

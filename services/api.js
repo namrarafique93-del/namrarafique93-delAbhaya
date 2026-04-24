@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Linking, Share } from 'react-native';
 import { BASE_URL, BASE_URL_CANDIDATES, backendUnavailableMessage } from './backendConfig';
 
 const TOKEN_KEY = '@safeguard_token';
@@ -331,6 +332,51 @@ export const incidentAPI = {
       return {
         success: false,
         error: error?.message || 'Cloudinary upload failed.',
+      };
+    }
+  },
+};
+
+export const videoAPI = {
+  saveVideo: async ({ videoUrl, incidentId }) =>
+    apiRequest('/save-video', {
+      method: 'POST',
+      body: { videoUrl, incidentId },
+    }),
+
+  listUserVideos: async (userId) =>
+    apiRequest(`/user-videos/${encodeURIComponent(String(userId || '').trim())}`, {
+      method: 'GET',
+    }),
+
+  deleteVideo: async (id) =>
+    apiRequest(`/video/${encodeURIComponent(String(id || '').trim())}`, {
+      method: 'DELETE',
+    }),
+
+  openDownload: async (url) => {
+    const videoUrl = String(url || '').trim();
+    if (!videoUrl) {
+      return { success: false, error: 'Video URL is missing.' };
+    }
+
+    try {
+      const supported = await Linking.canOpenURL(videoUrl);
+      if (supported) {
+        await Linking.openURL(videoUrl);
+        return { success: true };
+      }
+
+      await Share.share({
+        message: videoUrl,
+        title: 'Video Evidence',
+        url: videoUrl,
+      });
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        error: error?.message || 'Could not open the video download link.',
       };
     }
   },
