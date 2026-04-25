@@ -29,11 +29,15 @@
       "edgeToEdgeEnabled": true,
       "usesCleartextTraffic": true,
       "permissions": [
-        "ACCESS_COARSE_LOCATION",
-        "ACCESS_FINE_LOCATION",
-        "CAMERA",
-        "RECORD_AUDIO"
-      ]
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.harshad290507.womenSafetyAppJS"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -53,6 +57,11 @@
         }
       ],
       "expo-video"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b2786c3c-1614-49e9-a4fc-add0c66929d5"
+      }
+    }
   }
 }
